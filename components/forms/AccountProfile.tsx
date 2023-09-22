@@ -1,20 +1,12 @@
 "use client";
 
-//Zod
 import * as z from "zod";
+import Image from "next/image";
+import { useForm } from "react-hook-form";
+import { usePathname, useRouter } from "next/navigation";
+import { ChangeEvent, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-//Next Components
-import Image from "next/image";
-
-//React hooks
-import { useForm } from "react-hook-form";
-import { ChangeEvent, useState } from "react";
-
-//Next navigation
-import { usePathname, useRouter } from "next/navigation";
-
-//Components
 import {
   Form,
   FormControl,
@@ -27,12 +19,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
-//Utils
-import { isBase64Image } from "@/lib/utils";
 import { useUploadThing } from "@/lib/uploadthing";
-import { UserValidation } from "@/lib/validations/user";
+import { isBase64Image } from "@/lib/utils";
 
-//Actions
+import { UserValidation } from "@/lib/validations/user";
 import { updateUser } from "@/lib/actions/user.actions";
 
 interface Props {
@@ -151,7 +141,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
                   type="file"
                   accept="image/*"
                   placeholder="Add profile photo"
-                  className="account-form_image-input cursor-pointer"
+                  className="account-form_image-input"
                   onChange={(e) => handleImage(e, field.onChange)}
                 />
               </FormControl>

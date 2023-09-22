@@ -1,38 +1,30 @@
-//components
+import { currentUser } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
+
+import { fetchUser } from "@/lib/actions/user.actions";
 import AccountProfile from "@/components/forms/AccountProfile";
 
-//Clerk
-import { currentUser } from "@clerk/nextjs";
-import Link from "next/link";
-
-const page = async () => {
-  //Clerk provide us with current user option, so we can collect from it the data as the current user logged in
+async function Page() {
   const user = await currentUser();
+  if (!user) return null; // to avoid typescript warnings
 
-  const userInfo = {} as any;
+  const userInfo = await fetchUser(user.id);
+  if (userInfo?.onboarded) redirect("/");
 
   const userData = {
-    id: user?.id || "",
+    id: user.id,
     objectId: userInfo?._id,
-    username: userInfo ? userInfo?.username : user?.username,
-    name: userInfo ? userInfo?.name : user?.firstName ?? "",
+    username: userInfo ? userInfo?.username : user.username,
+    name: userInfo ? userInfo?.name : user.firstName ?? "",
     bio: userInfo ? userInfo?.bio : "",
-    image: userInfo ? userInfo?.image : user?.imageUrl,
+    image: userInfo ? userInfo?.image : user.imageUrl,
   };
 
   return (
     <main className="mx-auto flex max-w-3xl flex-col justify-start px-10 py-20">
-      <div className="flex flex-row items-center justify-between">
-        <h1 className="head-text">onBoarding</h1>
-        <Link
-          href="/"
-          className="font-semibold underline text-white cursor-pointer"
-        >
-          Back Home
-        </Link>
-      </div>
+      <h1 className="head-text">Onboarding</h1>
       <p className="mt-3 text-base-regular text-light-2">
-        Complete your profile now, to use Threads.
+        Complete your profile now, to use Threds.
       </p>
 
       <section className="mt-9 bg-dark-2 p-10">
@@ -40,6 +32,6 @@ const page = async () => {
       </section>
     </main>
   );
-};
+}
 
-export default page;
+export default Page;
